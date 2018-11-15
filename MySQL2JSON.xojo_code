@@ -301,7 +301,10 @@ Protected Class MySQL2JSON
 
 	#tag Method, Flags = &h0
 		Sub PrintHelp()
-		  Print "mysql2json " + CStr(App.Version) + " exports a given database to a JSON file with PHP serialization conversion."
+		  Dim sVersion As String = App.MajorVersion.ToText + "." +_
+		  App.MinorVersion.ToText + "." +_
+		  App.BugVersion.ToText
+		  Print "mysql2json v" + sVersion + " exports a given database to a JSON file with PHP serialization conversion."
 		  Print "Usage: mysql2json [OPTION]... [DATABASE]"
 		  Print ""
 		  Print "Example: "
@@ -323,7 +326,7 @@ Protected Class MySQL2JSON
 		  Print "  -?, --help           print this help"
 		  Print "  -h, --host           host name or IP address (default: localhost)"
 		  Print "  -l, --list           list databases & tables available for export"
-		  Print "  -o, --output         output path & file (default is db name in current folder)"
+		  Print "  -o, --output         path & file (default is db name in current folder)"
 		  Print "  -p, --password       password to connect with (default is none)"
 		  Print "  -P, --port           the TCP/IP port number to connect on"
 		  Print "  -t, --tables         a comma delimited list of tables (default empty for all)"
