@@ -420,10 +420,6 @@ Protected Class MySQL2JSON
 		jsonDB As JSONItem
 	#tag EndProperty
 
-	#tag Property, Flags = &h1
-		Protected mLoopForAWhile As Integer
-	#tag EndProperty
-
 	#tag Property, Flags = &h0
 		nPort As Integer = 3306
 	#tag EndProperty
@@ -561,6 +557,7 @@ Protected Class MySQL2JSON
 			Name="sTables"
 			Group="Behavior"
 			Type="String"
+			EditorType="MultiLineEditor"
 		#tag EndViewProperty
 	#tag EndViewBehavior
 End Class
