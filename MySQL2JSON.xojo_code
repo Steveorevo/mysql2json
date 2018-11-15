@@ -313,7 +313,7 @@ Protected Class MySQL2JSON
 		  Print ""
 		  Print "or"
 		  Print ""
-		  Print " mysql2json --user=root exampleDB123"
+		  Print "  mysql2json --user=root exampleDB123"
 		  Print ""
 		  Print "Connects to MySQL database on port 3306 with root credentials"
 		  Print "and no password followed by dumping the database to a JSON file"
