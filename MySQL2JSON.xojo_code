@@ -341,7 +341,7 @@ Protected Class MySQL2JSON
 	#tag Method, Flags = &h0
 		Sub PrintHint()
 		  Print "mysql2json: missing database name"
-		  Print "Usage: mysql2json [OPTION]... [DATABASE]..."
+		  Print "Usage: mysql2json [OPTION]... [DATABASE]"
 		  Print ""
 		  Print "Try 'mysql2json --help' for more options."
 		  Quit
