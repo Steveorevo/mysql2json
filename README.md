@@ -5,7 +5,7 @@ Database to JSON object conversion tool with support for PHP serialization.
 
 ### About
 
-This command line tool will export the specified database to a "pretty print" JSON object. Auto-detection of PHP serialized strings will also be converted to a JSON object. This tool allows for simple line-by-line representation of a MySQL database and is perfect for viewing content in text based comparison tools.
+This command line tool will export the specified database to a "pretty print" JSON object. Auto-detection of PHP serialized strings will also be converted to a JSON object. This tool allows for simple line-by-line representation of a MySQL database and is perfect for viewing content in text based comparison tools. Re-import can be performed using the companion tool, [json2mysql](https://github.com/steveorevo/json2mysql).
 
 #### Help
 Type mysql2json --help
