@@ -78,8 +78,7 @@ class MySQL2JSON {
         'prefix'       => 'q',
         'longPrefix'   => 'quiet',
         'description'  => 'quiet (no output)',
-        'castTo'       => 'bool',
-        'defaultValue' => false,
+        'noValue'      => true
       ],
       'version' => [
         'prefix'       => 'v',
@@ -184,6 +183,9 @@ class MySQL2JSON {
           array_push($objDB->tables[$i]->data, (object)$row);
         }
       }
+      if (! $this->climate->arguments->defined('quiet')) {
+        echo "Exported table: " . $name . "\n";
+      }
     }
     $this->db->close();
     $output = $this->climate->arguments->get('output');
@@ -191,6 +193,9 @@ class MySQL2JSON {
       $output = getcwd() . "/" . $database . ".json";
     }
     file_put_contents($output, json_encode($objDB, JSON_PRETTY_PRINT));
+    if (! $this->climate->arguments->defined('quiet')) {
+      echo "File export complete: $output\n";
+    }
     exit();
   }
 
