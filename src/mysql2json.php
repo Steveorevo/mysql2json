@@ -248,7 +248,7 @@ class MySQL2JSON {
         $name = $row["Tables_in_$database"];
         if ($this->climate->arguments->defined('tables')) {
           $t = ',' . $this->climate->arguments->get('tables') . ',';
-          if (FALSE !== strpos($t, $name)) {
+          if (FALSE !== strpos($t, "," . $name . ",")) {
             array_push($this->tables, $name);
           }
         }else{
