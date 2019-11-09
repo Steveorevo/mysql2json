@@ -180,6 +180,22 @@ class MySQL2JSON {
       if ($r->num_rows > 0) {
         $data = [];
         while($row = $r->fetch_assoc()) {
+
+          // Check row for serialized data in string
+          foreach ((object)$row as $k => $v) {
+            for ($c = 0; $c < count($objDB->tables[$i]->columns); $c++) {
+              if ($k == $objDB->tables[$i]->columns[$c]->name) {
+                break;
+              }
+            }
+
+            // Update data-type to object and unserialize data
+            if (true === $this->is_serialized($v)) {
+              $objDB->tables[$i]->columns[$c]->json_type = 'object';
+              (object)$row[$k] = unserialize($v);
+            }
+          }
+
           array_push($objDB->tables[$i]->data, (object)$row);
         }
       }
@@ -291,6 +307,21 @@ class MySQL2JSON {
     }
     if ($this->db->connect_error) {
       die('Connection failed: ' . $this->db->connect_error);
+    }
+  }
+
+  /**
+   * Checks to see if the given data is PHP serialized data in a string.
+   * 
+   * @param (string) - the data to analyze.
+   * @return (boolean) true if serialized or false if not.
+   */
+  function is_serialized($str) {
+    $data = @unserialize($str);
+    if ($str === 'b:0;' || $data !== false) {
+        return true;
+    } else {
+        return false;
     }
   }
 }
