@@ -5,7 +5,7 @@
 
 require_once( __DIR__ . '/../vendor/autoload.php' );
 class MySQL2JSON {
-  public $version = "1.0.0"; // TODO: obtain via composer
+  public $version = "1.1.0"; // TODO: obtain via composer
   public $climate = NULL;
   public $dbNames = [];
   public $tables = [];
