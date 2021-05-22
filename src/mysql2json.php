@@ -245,14 +245,14 @@ class MySQL2JSON {
  */
   function fix_serialized($data) {
 
-    // Change objects to 'stdClass'.
+    // Convert objects to 'stdClass'
     $data = preg_replace( '/^O:\d+:"[^"]++"/', 'O:8:"stdClass"', $data );
 
-    // Make private and protected properties public.
+    // Make private and protected properties public
     $data = preg_replace_callback( 
         '/:\d+:"\0.*?\0([^"]+)"/',
 
-        // Needed to calculate new key-length.
+        // Recalculate new key-length
         function($matches) {
             return ":" . strlen( $matches[1] ) . ":\"" . $matches[1] . "\"";
         },
