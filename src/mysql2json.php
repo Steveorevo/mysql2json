@@ -51,6 +51,12 @@ class MySQL2JSON {
         'description' => 'list databases & tables available for export',
         'noValue'     => true,
       ],
+      'exclude' => [
+        'prefix'      => 'x',
+        'longPrefix'  => 'exclude',
+        'description' => 'excludes rows with _transient_ in option_name column (WordPress)',
+        'noValue'     => true,
+      ],
       'output' => [
         'prefix'       => 'o',
         'longPrefix'   => 'output',
@@ -187,14 +193,29 @@ class MySQL2JSON {
       $r = $this->db->query("SELECT * FROM $name;");
       if ($r->num_rows > 0) {
         while($row = $r->fetch_assoc()) {
-          // Check serialized data, update column data-type to object
-          foreach($columns as &$col) {
-            if ($this->is_serialized($row[$col->name])) {
-              $col->json_type = 'object';
-              $row[$col->name] = unserialize($row[$col->name]);
+          
+          // Check for exclude transients flag
+          $skip = false;
+          if ($this->climate->arguments->defined('exclude')) {
+            if (array_key_exists('option_name', $row) && array_key_exists('option_value', $row)) {
+              if (false !== strpos($row['option_name'], '_transient_')) {
+                $skip = true;
+              }
             }
           }
-          array_push($objDB->tables[$i]->data, $row);
+          
+          // Skip transients
+          if (false == $skip) {
+
+            // Check serialized data, update column data-type to object
+            foreach($columns as &$col) {
+              if ($this->is_serialized($row[$col->name])) {
+                $col->json_type = 'object';
+                $row[$col->name] = unserialize($row[$col->name]);
+              }
+            }
+            array_push($objDB->tables[$i]->data, $row);
+          }
         }
       }
       $r->free_result();
