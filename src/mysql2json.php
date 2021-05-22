@@ -349,11 +349,7 @@ class MySQL2JSON {
     $user = $this->climate->arguments->get('user');
     $password = $this->climate->arguments->get('password');
     $this->db = new mysqli($host, $user, $password, $database);
-    //var_dump($this->db->get_charset());
-    // if (!$this->db->set_charset("utf8")) {
-    //   printf("Error loading character set utf8: %s\n", $this->db->error);
-    //   exit();
-    // }
+
     if ($this->db->connect_error) {
       die('Connection failed: ' . $this->db->connect_error);
     }
