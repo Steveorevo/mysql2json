@@ -183,29 +183,21 @@ class MySQL2JSON {
     // Dump data for the given tables
     for ($i = 0; $i < count($objDB->tables); $i++) {
       $name = $objDB->tables[$i]->name;
+      $columns = &$objDB->tables[$i]->columns;
       $r = $this->db->query("SELECT * FROM $name;");
       if ($r->num_rows > 0) {
-        $data = [];
         while($row = $r->fetch_assoc()) {
-
-          // Check row for serialized data in string
-          foreach ((object)$row as $k => $v) {
-            for ($c = 0; $c < count($objDB->tables[$i]->columns); $c++) {
-              if ($k == $objDB->tables[$i]->columns[$c]->name) {
-                break;
-              }
-            }
-
-            // Update data-type to object and unserialize data
-            if (true === $this->is_serialized($v)) {
-              $objDB->tables[$i]->columns[$c]->json_type = 'object';
-              (object)$row[$k] = unserialize($v);
+          // Check serialized data, update column data-type to object
+          foreach($columns as &$col) {
+            if ($this->is_serialized($row[$col->name])) {
+              $col->json_type = 'object';
+              $row[$col->name] = unserialize($row[$col->name]);
             }
           }
-
-          array_push($objDB->tables[$i]->data, (object)$row);
+          array_push($objDB->tables[$i]->data, $row);
         }
       }
+      $r->free_result();
       if (! $this->climate->arguments->defined('quiet')) {
         echo "Exported table: " . $name . "\n";
       }
@@ -308,10 +300,11 @@ class MySQL2JSON {
     $user = $this->climate->arguments->get('user');
     $password = $this->climate->arguments->get('password');
     $this->db = new mysqli($host, $user, $password, $database);
-    if (!$this->db->set_charset("utf8")) {
-      printf("Error loading character set utf8: %s\n", $this->db->error);
-      exit();
-    }
+    //var_dump($this->db->get_charset());
+    // if (!$this->db->set_charset("utf8")) {
+    //   printf("Error loading character set utf8: %s\n", $this->db->error);
+    //   exit();
+    // }
     if ($this->db->connect_error) {
       die('Connection failed: ' . $this->db->connect_error);
     }
