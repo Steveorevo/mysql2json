@@ -197,7 +197,7 @@ class MySQL2JSON {
           // Check for exclude transients flag
           $skip = false;
           if ($this->climate->arguments->defined('exclude')) {
-            if (array_key_exists('option_name', $row) && array_key_exists('option_value', $row)) {
+            if (array_key_exists('option_name', $row)) {
               if (false !== strpos($row['option_name'], '_transient_')) {
                 $skip = true;
               }
