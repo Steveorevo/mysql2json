@@ -211,7 +211,7 @@ class MySQL2JSON {
             foreach($columns as &$col) {
               if ($this->is_serialized($row[$col->name])) {
                 $col->json_type = 'object';
-                $row[$col->name] = unserialize($row[$col->name]);
+                $row[$col->name] = unserialize( $this->fix_serialized($row[$col->name]));
               }
             }
             array_push($objDB->tables[$i]->data, $row);
@@ -234,6 +234,34 @@ class MySQL2JSON {
     }
     exit();
   }
+
+ /**
+ * Takes serialized PHP and converts objects that would otherwise become
+ * __PHP_Incomplete_Class definitions and converts them to a stdClass 
+ * object; allowing access to private and public property data.
+ *
+ * @param  string $data serialized PHP data
+ * @return string data converted to stdClass with all properties
+ */
+  function fix_serialized($data) {
+
+    // Change objects to 'stdClass'.
+    $data = preg_replace( '/^O:\d+:"[^"]++"/', 'O:8:"stdClass"', $data );
+
+    // Make private and protected properties public.
+    $data = preg_replace_callback( 
+        '/:\d+:"\0.*?\0([^"]+)"/',
+
+        // Needed to calculate new key-length.
+        function($matches) {
+            return ":" . strlen( $matches[1] ) . ":\"" . $matches[1] . "\"";
+        },
+        $data
+    );
+
+    // Return the corrected serialized data
+    return $data;
+}
 
   /**
    * List available databases or tables for a given database
