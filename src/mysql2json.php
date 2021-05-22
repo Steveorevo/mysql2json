@@ -212,7 +212,7 @@ class MySQL2JSON {
     }
     $this->db->close();
     $output = $this->climate->arguments->get('output');
-    if ('' === $output) {
+    if ('' == $output) {
       $output = getcwd() . "/" . $database . ".json";
     }
     file_put_contents($output, json_encode($objDB, JSON_PRETTY_PRINT));
