@@ -248,13 +248,19 @@ class MySQL2JSON {
     // Convert objects to 'stdClass'
     $data = preg_replace( '/^O:\d+:"[^"]++"/', 'O:8:"stdClass"', $data );
 
-    // Make private and protected properties public
+    // Make private and protected properties public (replace null*null, and nullAnull)
     $data = preg_replace_callback( 
         '/:\d+:"\0.*?\0([^"]+)"/',
 
         // Recalculate new key-length
         function($matches) {
-            return ":" . strlen( $matches[1] ) . ":\"" . $matches[1] . "\"";
+          if (false !== strpos($matches[0], ":\"\0*")){
+              $prop = '*|';
+          }elseif (false !== strpos($matches[0], ":\"\0A")){
+              $prop = 'A|';
+          }
+          $prop .= $matches[1];
+          return ":" . strlen( $prop ) . ":\"" . $prop . "\"";
         },
         $data
     );
