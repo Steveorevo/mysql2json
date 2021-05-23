@@ -267,7 +267,7 @@ class MySQL2JSON {
 
     // Return the corrected serialized data
     return $data;
-}
+  }
 
   /**
    * List available databases or tables for a given database
