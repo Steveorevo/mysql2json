@@ -12,7 +12,7 @@ foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php
 }
 
 class MySQL2JSON {
-  public $version = "1.1.2"; // TODO: obtain via composer
+  public $version = "2.0.0"; // TODO: obtain via composer
   public $climate = NULL;
   public $dbNames = [];
   public $tables = [];
@@ -235,7 +235,7 @@ class MySQL2JSON {
     exit();
   }
 
- /**
+/**
  * Takes serialized PHP and converts objects that would otherwise become
  * __PHP_Incomplete_Class definitions and converts them to a stdClass 
  * object; allowing access to private and public property data.
