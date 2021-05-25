@@ -254,6 +254,7 @@ class MySQL2JSON {
 
         // Recalculate new key-length
         function($matches) {
+          $prop = '';
           if (false !== strpos($matches[0], ":\"\0*")){
               $prop = '*|';
           }elseif (false !== strpos($matches[0], ":\"\0A")){
