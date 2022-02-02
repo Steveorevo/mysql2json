@@ -273,6 +273,23 @@ class MySQL2JSON {
         },
         $data
     );
+ 
+    // Convert object references to '__PHP_reference' to prevent recursion errors
+    if (strpos($data, '";r:') !== false) {
+      $lines = explode('";r:', $data);
+      for($i=0; $i < (count($lines)-1); $i++) {
+        $line = $lines[$i]; 
+        $line = new GString($line);
+        $before = $line->delRightMost('s:')->__toString() . 's:';
+
+        // Recalculate new key-length
+        $n = $line->getRightMost('s:')->getLeftMost(':')->__toString();
+        $n = intval($n) + 15; 
+        $after = ':' . $line->getRightMost('s:')->delLeftMost(':')->__toString();
+        $lines[$i] = utf8_encode($before . $n . $after);
+      }
+      $data = implode('__PHP_reference";i:', $lines);
+    }
 
     // Return the corrected serialized data
     return $data;
