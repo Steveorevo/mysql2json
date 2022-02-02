@@ -10,6 +10,7 @@ foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php
       break;
   }
 }
+use Steveorevo\GString as GString;
 class __PHP_stdClass {
   public $__PHP_stdClass = true;
 }
@@ -171,7 +172,7 @@ class MySQL2JSON {
         while($row = $r->fetch_assoc()) {
           $column = new stdClass();
           $column->name = $row["Field"];
-          $type = new steveorevo\GString($row["Type"]);
+          $type = new GString($row["Type"]);
           $type = $type->getLeftMost("(")->__toString();
           $column->mysql_type = $type;
           if (FALSE !== in_array($type, $mapString)) {
@@ -388,7 +389,7 @@ class MySQL2JSON {
 // From command line, create instance & do cli arguments
 if ( PHP_SAPI === 'cli' ) {
   $myCmd = new MySQL2JSON();
-  $name = new Steveorevo\GString(__FILE__);
+  $name = new GString(__FILE__);
   $argv[0] = $name->getRightMost("/")->delRightMost(".");
   $myCmd->cli();
 }
