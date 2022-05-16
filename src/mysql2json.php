@@ -256,7 +256,7 @@ class MySQL2JSON {
     // Convert existing 'stdClass' to '__PHP_stdClass' to distinguish it from arrays
     $data = str_replace('O:8:"stdClass"', 'O:14:"__PHP_stdClass"', $data);
 
-    // Make __PHP_Incomplete_Class private and protected properties public (replace null*null, and nullAnull)
+    // Make __PHP_Incomplete_Class private and protected properties public (replace null*null, and nullCLASSNAMEnull)
     $data = preg_replace_callback( 
         '/:\d+:"\0.*?\0([^"]+)"/',
 
@@ -265,7 +265,7 @@ class MySQL2JSON {
           $prop = '';
           if (false !== strpos($matches[0], ":\"\0*")){
               $prop = '*|';
-          }elseif (false !== strpos($matches[0], ":\"\0A")){
+          }elseif (false !== strpos($matches[0], ":\"\0")){
               $prop = 'A|';
           }
           $prop .= $matches[1];
