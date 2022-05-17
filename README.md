@@ -12,7 +12,7 @@ Type mysql2json --help
 
 ```
 MySQL2JSON is a database to JSON export tool with support for serialized PHP.
-Version 2.1.0
+Version 2.1.3
 
 Usage: mysql2json [-x, --exclude] [-?, --help] [-h host, --hose host (default: localhost)] [-l, --list] [-o output, --output output] [-p password, --password password] [-P port, --port port] [-q, --quiet] [-t tables, --tables tables] [-u user, --user user (default: root)] [-v, --version] [database]
 

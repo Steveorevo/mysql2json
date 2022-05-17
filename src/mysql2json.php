@@ -16,7 +16,7 @@ class __PHP_stdClass {
 }
 
 class MySQL2JSON {
-  public $version = "2.1.0"; // TODO: obtain via composer
+  public $version = "2.1.3"; // TODO: obtain via composer
   public $climate = NULL;
   public $dbNames = [];
   public $tables = [];
@@ -273,9 +273,10 @@ class MySQL2JSON {
         },
         $data
     );
- 
+    
     // Convert object references to '__PHP_reference' to prevent recursion errors
     if (strpos($data, '";r:') !== false) {
+      
       $lines = explode('";r:', $data);
       for($i=0; $i < (count($lines)-1); $i++) {
         $line = $lines[$i]; 
