@@ -11,6 +11,7 @@ foreach ([__DIR__ . '/../../../autoload.php', __DIR__ . '/../vendor/autoload.php
   }
 }
 use Steveorevo\GString as GString;
+
 class __PHP_stdClass {
   public $__PHP_stdClass = true;
 }
@@ -255,6 +256,32 @@ class MySQL2JSON {
 
     // Convert existing 'stdClass' to '__PHP_stdClass' to distinguish it from arrays
     $data = str_replace('O:8:"stdClass"', 'O:14:"__PHP_stdClass"', $data);
+
+    // Sense classes that have serialize implmented
+    if (strpos($data, 'C:') !== false) {
+
+      $tmp = new GString($data);
+      $tmp = $tmp->delLeftMost('C:');
+      $v = $tmp->getLeftMost(":")->__toString();
+      if (is_numeric($v)) {
+
+        // Extract the class name
+        $tmp = $tmp->delLeftMost(":");
+        $cname = $tmp->getLeftMost(":")->__toString();
+        $tmp = $tmp->delLeftMost(":");
+
+        // Extract the class data
+        $tmp = $tmp->delLeftMost(":{");
+        if (substr($tmp->__toString(), -1) == "}") {
+          $cdata = substr($tmp->__toString(), 0, -1);
+
+          $obj = new stdClass();
+          $obj->__PHP_impSerialized = $cname;
+          $obj->data = unserialize($this->fix_serialized($cdata));
+          $data = serialize($obj);
+        }
+      }
+    }
 
     // Make __PHP_Incomplete_Class private and protected properties public (replace null*null, and nullCLASSNAMEnull)
     $data = preg_replace_callback( 
